@@ -63,7 +63,7 @@ def generate_image():
     pil_image = Image.fromarray(generated_image)
 
     # Resize from (64, 64) to (128, 128)
-    pil_image = pil_image.resize((128, 128))
+    pil_image = pil_image.resize((256, 256))
 
     return pil_image
 
@@ -102,6 +102,18 @@ def generate_text():
     return result
 
 
+def add_shadow(image, text, draw, font, x, y, offset=3, shadow_color='black'):
+    for off in range(offset):
+        draw.text((x - off, y), text, font=font, fill=shadow_color)
+        draw.text((x + off, y), text, font=font, fill=shadow_color)
+        draw.text((x, y + off), text, font=font, fill=shadow_color)
+        draw.text((x, y - off), text, font=font, fill=shadow_color)
+        draw.text((x - off, y + off), text, font=font, fill=shadow_color)
+        draw.text((x + off, y + off), text, font=font, fill=shadow_color)
+        draw.text((x - off, y - off), text, font=font, fill=shadow_color)
+        draw.text((x + off, y - off), text, font=font, fill=shadow_color)
+
+
 def put_text_on_image(image, text):
     draw = ImageDraw.Draw(image)
 
@@ -115,10 +127,15 @@ def put_text_on_image(image, text):
     # Import font
     with open('fonts/' + font_choice, "rb") as f:
         bytes_font = BytesIO(f.read())
-    font = ImageFont.truetype(bytes_font, 10)
+    font = ImageFont.truetype(bytes_font, 18)
 
+    # Select left-bottom of the text
+    x, y = 5, 230
+
+    # Draw shadow
+    add_shadow(image, text, draw, font, x, y)
     # Draw text
-    draw.text((5, 100), text, color, font=font)
+    draw.text((5, 230), text, color, font=font)
 
     return image
 
