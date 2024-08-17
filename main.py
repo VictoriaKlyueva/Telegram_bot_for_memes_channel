@@ -4,6 +4,8 @@ import onnxruntime as ort
 import numpy as np
 from PIL import Image
 
+CHANNEL_ID = -1002242343472
+
 
 def import_token(path):
     with open(os.path.join(path, 'token.txt')) as f:
@@ -36,6 +38,10 @@ def generate_image():
 
     pil_image = Image.fromarray(generated_image)
 
+    # Creating folder for generated images and text
+    if not os.path.isdir("generated_data"):
+        os.mkdir("generated_data")
+
     # Save the PIL image in the root folder
     pil_image.save('generated_data/generated_image.png')
 
@@ -43,9 +49,9 @@ def generate_image():
 @bot.message_handler(content_types=['text', 'image'])
 def send_meme(message):
     generate_image()
-    bot.send_message(-1002242343472, 'ошибка! успех!')
     file = open('generated_data/generated_image.png', 'rb')
-    bot.send_photo(-1002242343472, file)
+    bot.send_photo(CHANNEL_ID, file)
 
 
+# Loop for code execution
 bot.infinity_polling(timeout=10, long_polling_timeout=5)
