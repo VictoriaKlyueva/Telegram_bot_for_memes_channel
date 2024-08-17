@@ -30,12 +30,12 @@ token = import_token('')
 bot = telebot.TeleBot(token)
 
 # Making ort session for GAN
-ort_session_gan = ort.InferenceSession('generator.onnx')
+ort_session_gan = ort.InferenceSession('models/generator.onnx')
 
 # Making pipeline for transformer
 pipe = pipeline(
     'text-generation',
-    model='C:/Users/Legion/PycharmProjects/Telegram_bot_for_memes_channel/gpt-memes',
+    model='C:/Users/Legion/PycharmProjects/Telegram_bot_for_memes_channel/models/gpt-memes',
     tokenizer='ai-forever/rugpt3small_based_on_gpt2',
     max_new_tokens=50,
     truncation=True
