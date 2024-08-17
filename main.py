@@ -97,12 +97,18 @@ def get_prompt():
 
 
 def generate_text():
-    prompt = get_prompt()
-    result = post_processing(pipe(prompt)[0]['generated_text'])
+    while True:
+        prompt = get_prompt()
+        result = post_processing(pipe(prompt)[0]['generated_text'])[0]
+
+        if len(result) > len(prompt):
+            break
+
+    print(prompt, result)
     return result
 
 
-def add_shadow(image, text, draw, font, x, y, offset=3, shadow_color='black'):
+def add_shadow(text, draw, font, x, y, offset=3, shadow_color='black'):
     for off in range(offset):
         draw.text((x - off, y), text, font=font, fill=shadow_color)
         draw.text((x + off, y), text, font=font, fill=shadow_color)
@@ -133,7 +139,7 @@ def put_text_on_image(image, text):
     x, y = 5, 230
 
     # Draw shadow
-    add_shadow(image, text, draw, font, x, y)
+    add_shadow(text, draw, font, x, y)
     # Draw text
     draw.text((5, 230), text, color, font=font)
 
@@ -145,9 +151,7 @@ def send_meme(message):
     # Generate image
     image = generate_image()
     # Generate text
-    text = generate_text()[0]
-
-    print(text)
+    text = generate_text()
 
     # Create meme
     meme = put_text_on_image(image, text)
