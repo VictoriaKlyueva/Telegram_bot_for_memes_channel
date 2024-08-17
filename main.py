@@ -83,7 +83,7 @@ def get_prompt():
     prompts = prompts_object.read().replace('\r', '').split('\n')
 
     prompt = random.choice(prompts).split()
-    prompt = prompt if len(prompt) <= 3 else prompt[:3]
+    prompt = prompt if len(prompt) <= 3 else prompt[:random.randint(1, 3)]
     prompt = ' '.join(prompt)
 
     if len(prompt) == 1:
@@ -104,7 +104,7 @@ def generate_text():
         if len(result) > len(prompt):
             break
 
-    print(prompt, result)
+    print("Prompt: ", prompt, "Output: ", result)
     return result
 
 
@@ -120,6 +120,17 @@ def add_shadow(text, draw, font, x, y, offset=3, shadow_color='black'):
         draw.text((x + off, y - off), text, font=font, fill=shadow_color)
 
 
+def dynamic_text_position(text):
+    # Select font size
+    font_size = int(480 / len(text))
+
+    # Select left-bottom of the text
+    x = 15
+    y = 240 - font_size
+
+    return font_size, x, y
+
+
 def put_text_on_image(image, text):
     draw = ImageDraw.Draw(image)
 
@@ -130,18 +141,17 @@ def put_text_on_image(image, text):
     # Select color
     color = (255, 255, 255)
 
+    font_size, x, y = dynamic_text_position(text)
+
     # Import font
     with open('fonts/' + font_choice, "rb") as f:
         bytes_font = BytesIO(f.read())
-    font = ImageFont.truetype(bytes_font, 18)
-
-    # Select left-bottom of the text
-    x, y = 5, 230
+    font = ImageFont.truetype(bytes_font, font_size)
 
     # Draw shadow
     add_shadow(text, draw, font, x, y)
     # Draw text
-    draw.text((5, 230), text, color, font=font)
+    draw.text((x, y), text, color, font=font)
 
     return image
 
