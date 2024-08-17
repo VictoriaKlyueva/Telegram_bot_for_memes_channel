@@ -13,6 +13,8 @@ from io import BytesIO
 
 import random
 
+import codecs
+
 CHANNEL_ID = -1002242343472
 
 
@@ -75,8 +77,27 @@ def post_processing(text):
     return text.replace('\n', '').replace('&nbsp;', ' ').split('  ')
 
 
+def get_prompt():
+    path = 'prompts_data/'
+    prompts_object = codecs.open(path + "prompts_ideas.txt", "r", "utf_8_sig")
+    prompts = prompts_object.read().replace('\r', '').split('\n')
+
+    prompt = random.choice(prompts).split()
+    prompt = prompt if len(prompt) <= 3 else prompt[:3]
+    prompt = ' '.join(prompt)
+
+    if len(prompt) == 1:
+        addition_object = codecs.open(path + "prompts_ideas.txt", "r", "utf_8_sig")
+        additions = addition_object.read().replace('\r', '').split('\n')
+        addition = random.choice(prompts)
+
+        prompt += ' ' + addition
+
+    return prompt
+
+
 def generate_text():
-    prompt = 'Пашка соси'
+    prompt = get_prompt()
     result = post_processing(pipe(prompt)[0]['generated_text'])
     return result
 
@@ -87,15 +108,17 @@ def put_text_on_image(image, text):
     # Select font
     fonts = os.listdir('fonts')
     font_choice = random.choice(fonts)
-    print(font_choice)
+
+    # Select color
+    color = (255, 255, 255)
 
     # Import font
     with open('fonts/' + font_choice, "rb") as f:
         bytes_font = BytesIO(f.read())
-    font = ImageFont.truetype(bytes_font, 16)
+    font = ImageFont.truetype(bytes_font, 10)
 
     # Draw text
-    draw.text((5, 100), text, (255, 255, 255), font=font)
+    draw.text((5, 100), text, color, font=font)
 
     return image
 
@@ -106,6 +129,8 @@ def send_meme(message):
     image = generate_image()
     # Generate text
     text = generate_text()[0]
+
+    print(text)
 
     # Create meme
     meme = put_text_on_image(image, text)
