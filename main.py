@@ -79,7 +79,7 @@ def check_image(image):
 
     probability = soft_max(output[0])
 
-    threshold = 0.75
+    threshold = 0.85
     predicted_class = 1 if probability > threshold else 0
 
     print(f'Вероятность положительного класса: {probability:.4f}')
