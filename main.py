@@ -202,10 +202,12 @@ def put_text_on_image(image, text):
 
     font_size, x, y = dynamic_text_position(text)
 
+    print("")
+
     # Import font
     with open('fonts/' + font_choice, "rb") as f:
         bytes_font = BytesIO(f.read())
-    font = ImageFont.truetype(bytes_font, font_size)
+    font = ImageFont.truetype(bytes_font, font_size if font_choice == "lobster.ttf" else font_size - 1)
 
     # Draw shadow
     add_shadow(text, draw, font, x, y)
@@ -217,6 +219,13 @@ def put_text_on_image(image, text):
 
 @bot.message_handler(content_types=['text', 'image'])
 def send_meme(message):
+    # Skip if start message
+    if message.text == '/start':
+        return
+
+    print("Сообщение от пользователя:", message.from_user.username)
+    print("Текст сообщения::", message.text)
+
     # Generate image
     print('Начата генерация фото')
     # image = Image.fromarray(np.random.randint(0, 256, (IMAGE_SIZE, IMAGE_SIZE, 3), dtype=np.uint8))
@@ -241,12 +250,12 @@ def send_meme(message):
     try:
         file = open(path, 'rb')
         try:
-            if message.text != 'мем':
-                # bot.send_photo(CHANNEL_ID, file, caption=message.text)
-                bot.send_photo(message.chat.id, file, caption=message.text)
+            if message.text != 'мем' and message.text != 'Мем':
+                bot.send_photo(CHANNEL_ID, file, caption=message.text)
+                # bot.send_photo(message.chat.id, file, caption=message.text)
             else:
-                # bot.send_photo(CHANNEL_ID, file)
-                bot.send_photo(message.chat.id, file)
+                bot.send_photo(CHANNEL_ID, file)
+                # bot.send_photo(message.chat.id, file)
             print("Мем отправлен")
         except Exception as e:
             print("Error sending the photo")
