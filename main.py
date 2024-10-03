@@ -101,7 +101,7 @@ def generate_image():
                 prev_noisy_sample = scheduler.step(noisy_residual, t, model_input).prev_sample
                 model_input = prev_noisy_sample
 
-            if count % 50 == 0:
+            if count % 100 == 0:
                 print(f'Шаг: {count} / {scheduler.timesteps[0]}')
 
             count += 1
@@ -223,8 +223,14 @@ def send_meme(message):
     if message.text == '/start':
         return
 
+    # Print info about new generation request into console
     print("Сообщение от пользователя:", message.from_user.username)
     print("Текст сообщения::", message.text)
+
+    # Print info about new generation request into my tg chat
+    my_chat_id = 748487218
+    bot.send_message(my_chat_id, f'Сообщение: {message.text}')
+    bot.send_message(my_chat_id, f'От пользователя: {message.from_user.username}')
 
     # Generate image
     print('Начата генерация фото')
