@@ -126,7 +126,7 @@ def save_image(image, path):
     image.save(path)
 
 
-def post_processing(text):
+def text_post_processing(text):
     return text.replace('\n', '').replace('&nbsp;', ' ').split('  ')
 
 
@@ -152,7 +152,7 @@ def get_prompt():
 def generate_text():
     while True:
         prompt = get_prompt()
-        result = post_processing(pipe(prompt)[0]['generated_text'])[0]
+        result = text_post_processing(pipe(prompt)[0]['generated_text'])[0]
 
         if len(result) > len(prompt):
             break
@@ -219,56 +219,57 @@ def put_text_on_image(image, text):
 
 @bot.message_handler(content_types=['text', 'image'])
 def send_meme(message):
-    # Skip if start message
-    if message.text == '/start':
-        return
+    if message.from_user.username is not None:
+        # Skip if start message
+        if message.text == '/start':
+            return
 
-    # Print info about new generation request into console
-    print("Сообщение от пользователя:", message.from_user.username)
-    print("Текст сообщения::", message.text)
+        # Print info about new generation request into console
+        print("Сообщение от пользователя:", message.from_user.username)
+        print("Текст сообщения::", message.text)
 
-    # Print info about new generation request into my tg chat
-    my_chat_id = 748487218
-    bot.send_message(my_chat_id, f'Сообщение: {message.text}')
-    bot.send_message(my_chat_id, f'От пользователя: {message.from_user.username}')
+        # Print info about new generation request into my tg chat
+        my_chat_id = 748487218
+        bot.send_message(my_chat_id, f'Сообщение: {message.text}')
+        bot.send_message(my_chat_id, f'От пользователя: {message.from_user.username}')
 
-    # Generate image
-    print('Начата генерация фото')
-    # image = Image.fromarray(np.random.randint(0, 256, (IMAGE_SIZE, IMAGE_SIZE, 3), dtype=np.uint8))
-    image = generate_image()
-    print('Фото сгенерировано')
+        # Generate image
+        print('Начата генерация фото')
+        # image = Image.fromarray(np.random.randint(0, 256, (IMAGE_SIZE, IMAGE_SIZE, 3), dtype=np.uint8))
+        image = generate_image()
+        print('Фото сгенерировано')
 
-    # Generate text
-    print('Начата генерация текста')
-    text = generate_text()
-    print('Текст сгенерирован')
+        # Generate text
+        print('Начата генерация текста')
+        text = generate_text()
+        print('Текст сгенерирован')
 
-    # Create meme
-    meme = put_text_on_image(image, text)
+        # Create meme
+        meme = put_text_on_image(image, text)
 
-    # Save meme
-    path = 'generated_data/generated_meme.png'
-    save_image(meme, path)
-    # save_image(image, path)
-    print('Мем создан')
+        # Save meme
+        path = 'generated_data/generated_meme.png'
+        save_image(meme, path)
+        # save_image(image, path)
+        print('Мем создан')
 
-    # Send meme
-    try:
-        file = open(path, 'rb')
+        # Send meme
         try:
-            if message.text != 'мем' and message.text != 'Мем':
-                bot.send_photo(CHANNEL_ID, file, caption=message.text)
-                # bot.send_photo(message.chat.id, file, caption=message.text)
-            else:
-                bot.send_photo(CHANNEL_ID, file)
-                # bot.send_photo(message.chat.id, file)
-            print("Мем отправлен")
+            file = open(path, 'rb')
+            try:
+                if message.text != 'мем' and message.text != 'Мем':
+                    # bot.send_photo(CHANNEL_ID, file, caption=message.text)
+                    bot.send_photo(message.chat.id, file, caption=message.text)
+                else:
+                    # bot.send_photo(CHANNEL_ID, file)
+                    bot.send_photo(message.chat.id, file)
+                print("Мем отправлен")
+            except Exception as e:
+                print("Error sending the photo")
+                print(e)
         except Exception as e:
-            print("Error sending the photo")
+            print("Error reading the file")
             print(e)
-    except Exception as e:
-        print("Error reading the file")
-        print(e)
 
 
 # Loop for code execution
