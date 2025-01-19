@@ -17,7 +17,10 @@ import codecs
 CHANNEL_ID = -1002242343472
 TIME_STEPS = 1000
 IMAGE_SIZE = 256
-
+MY_CHAT_ID = 748487218
+HF_USERNAME = "vikosik3000"
+HF_MODEL_NAME = "rugpt2-memes-finetuned"
+TOKENIZER_PATH = "ai-forever/rugpt3small_based_on_gpt2"
 
 def import_token(path):
     with open(os.path.join(path, 'token.txt')) as f:
@@ -33,26 +36,35 @@ bot = telebot.TeleBot(token)
 # Load diffusion model and scheduler
 scheduler = DDPMScheduler.from_pretrained("google/ddpm-cat-256")
 model = UNet2DModel.from_pretrained("google/ddpm-cat-256").to('cuda')
-
 scheduler.set_timesteps(TIME_STEPS)
 
 upload_directory = "local_models/diffuser"
 model.from_pretrained(upload_directory).to('cuda')
 scheduler.from_pretrained(upload_directory)
 
+print("Диффузионная модель загружена")
+
 # Load resnet for generations validation
 resnet = cv2.dnn.readNetFromONNX('local_models/resnet34.onnx')
+
+print("Resnet загружен")
 
 # Making pipeline for transformer
 pipe = pipeline(
     'text-generation',
-    model='C:/Users/Legion/PycharmProjects/Telegram_bot_for_memes_channel/local_models/gpt-memes',
-    tokenizer='ai-forever/rugpt3small_based_on_gpt2',
-    max_new_tokens=50,
+    model=f"{HF_USERNAME}/{HF_MODEL_NAME}",
+    tokenizer=TOKENIZER_PATH,
+    temperature=1.2,
+    top_k=50,
+    top_p=0.9,
+    do_sample=True,
+    max_new_tokens=55,
     truncation=True
 )
 
-print("Модели загружены")
+print("GPT2 загружена")
+
+print("Все модели загружены")
 
 
 def soft_max(output):
@@ -141,7 +153,7 @@ def get_prompt():
 
     if len(prompt) == 1:
         addition_object = codecs.open(path + "prompts_ideas.txt", "r", "utf_8_sig")
-        additions = addition_object.read().replace('\r', '').split('\n')
+        # additions = addition_object.read().replace('\r', '').split('\n')
         addition = random.choice(prompts)
 
         prompt += ' ' + addition
@@ -202,8 +214,6 @@ def put_text_on_image(image, text):
 
     font_size, x, y = dynamic_text_position(text)
 
-    print("")
-
     # Import font
     with open('fonts/' + font_choice, "rb") as f:
         bytes_font = BytesIO(f.read())
@@ -229,9 +239,9 @@ def send_meme(message):
         print("Текст сообщения::", message.text)
 
         # Print info about new generation request into my tg chat
-        my_chat_id = 748487218
-        bot.send_message(my_chat_id, f'Сообщение: {message.text}')
-        bot.send_message(my_chat_id, f'От пользователя: {message.from_user.username}')
+
+        bot.send_message(MY_CHAT_ID, f'Сообщение: {message.text}')
+        bot.send_message(MY_CHAT_ID, f'От пользователя: {message.from_user.username}')
 
         # Generate image
         print('Начата генерация фото')
@@ -258,11 +268,9 @@ def send_meme(message):
             file = open(path, 'rb')
             try:
                 if message.text != 'мем' and message.text != 'Мем':
-                    # bot.send_photo(CHANNEL_ID, file, caption=message.text)
-                    bot.send_photo(message.chat.id, file, caption=message.text)
+                    bot.send_photo(MY_CHAT_ID, file, caption=message.text)
                 else:
-                    # bot.send_photo(CHANNEL_ID, file)
-                    bot.send_photo(message.chat.id, file)
+                    bot.send_photo(MY_CHAT_ID, file)
                 print("Мем отправлен")
             except Exception as e:
                 print("Error sending the photo")
