@@ -1,7 +1,7 @@
 import os
 import logging
 import telebot
-from config import WORKING_CHAT_ID
+from config import WORKING_CHAT_ID, MY_CHAT_ID
 from models.flux import generate_image
 from models.text_generator import generate_text
 from utils import import_token, save_image
@@ -32,7 +32,7 @@ class MemeBot:
 
         # Send notification to admin
         self.bot.send_message(
-            WORKING_CHAT_ID,
+            MY_CHAT_ID,
             f"New request from {user_info}:\n{message.text}"
         )
 
