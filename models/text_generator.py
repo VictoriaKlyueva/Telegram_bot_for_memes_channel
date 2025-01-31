@@ -2,7 +2,7 @@ import random
 import torch
 from transformers import pipeline
 from config import HF_USERNAME, HF_MODEL_NAME, TOKENIZER_PATH
-from utils.utils import get_prompt, text_post_processing
+from utils import get_prompt, text_post_processing
 
 
 device = "cuda" if torch.cuda.is_available() else "cpu"

@@ -2,9 +2,9 @@ import os
 import logging
 import telebot
 from config import WORKING_CHAT_ID
-from models.diffusion_model import generate_image
+from models.flux import generate_image
 from models.text_generator import generate_text
-from utils.utils import import_token, save_image
+from utils import import_token, save_image
 from meme_generator import put_text_on_image
 
 # Configure logging

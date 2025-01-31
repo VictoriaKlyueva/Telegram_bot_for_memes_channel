@@ -24,26 +24,32 @@ def text_post_processing(text):
 
 
 def get_prompt():
-    path = '../prompts_data/'
-    prompts_object = codecs.open(path + "prompts_ideas.txt", "r", "utf_8_sig")
-    prompts = prompts_object.read().replace('\r', '').split('\n')
+    path = os.path.join(os.path.curdir, 'prompts_data')
+    file_path = os.path.join(path, "prompts_ideas.txt")
+
+    if not os.path.isfile(file_path):
+        raise FileNotFoundError(f"No such file or directory: '{file_path}'")
+
+    with open(file_path, "r", encoding="utf-8") as prompts_object:
+        prompts = prompts_object.read().replace('\r', '').split('\n')
 
     prompt = random.choice(prompts).split()
     prompt = prompt if len(prompt) <= 3 else prompt[:random.randint(1, 3)]
     prompt = ' '.join(prompt)
 
     if len(prompt) == 1:
-        addition_object = codecs.open(path + "prompts_ideas.txt", "r", "utf_8_sig")
         addition = random.choice(prompts)
         prompt += ' ' + addition
 
     return prompt
 
 
-def dynamic_text_position(text):
-    font_size = int(480 / len(text))
-    x = 15
-    y = 240 - font_size
+def dynamic_text_position(size, text):
+    width, height = size
+    font_size = int(750 / len(text))
+    x = min(0.05 * width, 15)
+    y = height - font_size - 15
+
     return font_size, x, y
 
 

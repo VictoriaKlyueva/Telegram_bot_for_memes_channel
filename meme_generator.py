@@ -1,6 +1,6 @@
 from io import BytesIO
 from PIL import ImageDraw, ImageFont
-from utils.utils import *
+from utils import *
 
 
 def put_text_on_image(image, text):
@@ -10,7 +10,7 @@ def put_text_on_image(image, text):
     font_choice = random.choice(fonts)
     color = (255, 255, 255)
 
-    font_size, x, y = dynamic_text_position(text)
+    font_size, x, y = dynamic_text_position(image.size, text)
 
     with open('fonts/' + font_choice, "rb") as f:
         bytes_font = BytesIO(f.read())
