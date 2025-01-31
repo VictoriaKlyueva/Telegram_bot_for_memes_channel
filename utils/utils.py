@@ -24,7 +24,7 @@ def text_post_processing(text):
 
 
 def get_prompt():
-    path = 'prompts_data/'
+    path = '../prompts_data/'
     prompts_object = codecs.open(path + "prompts_ideas.txt", "r", "utf_8_sig")
     prompts = prompts_object.read().replace('\r', '').split('\n')
 

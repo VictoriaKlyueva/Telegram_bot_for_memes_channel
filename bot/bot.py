@@ -1,12 +1,13 @@
+import os
 import telebot
 from config import *
-from diffusion_model import generate_image
-from text_generator import generate_text
-from utils import import_token, save_image
+from models.diffusion_model import generate_image
+from models.text_generator import generate_text
+from utils.utils import import_token, save_image
 from meme_generator import put_text_on_image
 
 # Make bot session
-token = import_token('')
+token = import_token(os.path.curdir)
 bot = telebot.TeleBot(token)
 
 

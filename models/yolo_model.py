@@ -1,7 +1,7 @@
 from ultralytics import YOLO
 
 # Load YOLO model
-yolo = YOLO("yolo11n.pt")
+yolo = YOLO("../yolo11n.pt")
 
 print("YOLO модель загружена")
 

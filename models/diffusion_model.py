@@ -2,8 +2,8 @@ import torch
 from PIL import Image
 from diffusers import DDPMScheduler, UNet2DModel
 from config import TIME_STEPS, IMAGE_SIZE, EVAL_BATCH_SIZE
-from utils import save_image
-from yolo_model import check_image
+from utils.utils import save_image
+from models.yolo_model import check_image
 
 # Load diffusion model and scheduler
 scheduler = DDPMScheduler.from_pretrained("google/ddpm-cat-256")

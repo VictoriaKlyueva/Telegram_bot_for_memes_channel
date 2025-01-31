@@ -1,6 +1,6 @@
 from io import BytesIO
 from PIL import ImageDraw, ImageFont
-from utils import *
+from utils.utils import *
 
 
 def put_text_on_image(image, text):
