@@ -17,7 +17,7 @@ scheduler.from_pretrained(upload_directory)
 print("Диффузионная модель загружена")
 
 
-def generate_image():
+def generate_image_diffuser():
     while True:
         random_noise = torch.randn((EVAL_BATCH_SIZE, 3, IMAGE_SIZE, IMAGE_SIZE)).to('cuda')
         model_input = random_noise

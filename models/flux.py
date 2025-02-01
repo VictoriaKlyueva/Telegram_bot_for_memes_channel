@@ -18,7 +18,7 @@ def on_queue_update(update):
             print(log["message"])
 
 
-def generate_image():
+def generate_image_flux():
     while True:
         try:
             result = fal_client.subscribe(
