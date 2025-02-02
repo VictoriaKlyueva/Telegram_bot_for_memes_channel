@@ -46,9 +46,9 @@ def get_prompt():
 
 def dynamic_text_position(size, text):
     width, height = size
-    font_size = int(850 / (1.05 * len(text)))
-    x = min(0.05 * width, 15)
-    y = height - font_size - 15
+    font_size = int(930 / (1.05 * len(text)))
+    x = min(0.05 * width, 20)
+    y = height - font_size - 20
 
     return font_size, x, y
 

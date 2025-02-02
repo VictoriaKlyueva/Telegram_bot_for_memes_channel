@@ -59,24 +59,25 @@ class MemeBot:
         self.user_captions[message.chat.id] = message.text
 
         markup = types.ReplyKeyboardMarkup(row_width=2, resize_keyboard=True, one_time_keyboard=True)
-        btn1 = types.KeyboardButton("Хочу обосрыша!🤩")
+        btn1 = types.KeyboardButton("Хочу всратыша!🤩")
         btn2 = types.KeyboardButton("Давайте нормального.😐")
         markup.add(btn1, btn2)
 
-        self.bot.send_message(message.chat.id, "Ты хочешь сгенерировать обосрыша или нормального кота?",
+        self.bot.send_message(message.chat.id, "Ты хочешь сгенерировать всратыша или нормального кота?",
                               reply_markup=markup)
         self.bot.register_next_step_handler(message, self._handle_choice)
 
     def _handle_choice(self, message: telebot.types.Message) -> None:
         self.bot.send_message(message.chat.id, "Начата генерация мема...")
 
-        if message.text == "Хочу обосрыша!🤩":
+        if message.text == "Хочу всратыша!🤩":
             image = generate_image_diffuser()
         else:
             image = generate_image_flux()
 
         caption = self.user_captions.get(message.chat.id, "Вот твой мем!")
-        meme = put_text_on_image(image, caption)
+        meme_text = generate_text()
+        meme = put_text_on_image(image, meme_text)
 
         # Save result
         path = 'generated_data/generated_meme.png'

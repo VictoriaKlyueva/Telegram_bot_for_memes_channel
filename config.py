@@ -16,13 +16,16 @@ LORA_GENERATION_PARAMS = {
     "loras": [
         {
             "path": "https://v3.fal.media/files/penguin/IlpAt8UtvWlInDEXWo7NL_pytorch_lora_weights.safetensors",
-            "scale": 1.7
+            "scale": 1.8
         }
     ],
     "prompt": "!mEmE_c@t!",
     "embeddings": [],
-    "image_size": "square",
+    "image_size": {
+        "width": 512,
+        "height": 512
+    },
     "model_name": None,
-    "guidance_scale": 5,
-    "enable_safety_checker": True,
+    "guidance_scale": 6,
+    "enable_safety_checker": True
 }
