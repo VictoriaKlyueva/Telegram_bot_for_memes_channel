@@ -1,7 +1,6 @@
 import os
 import logging
 import telebot
-from PIL import Image
 from telebot import types
 from config import WORKING_CHAT_ID, MY_CHAT_ID, CHANNEL_ID
 from models.flux import generate_image_flux
