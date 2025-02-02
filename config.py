@@ -29,3 +29,15 @@ LORA_GENERATION_PARAMS = {
     "guidance_scale": 6,
     "enable_safety_checker": True
 }
+
+UPSCALER_PARAMS = {
+  "prompt": "masterpiece, best quality, highres",
+  "image_url": "",
+  "creativity": 0.35,
+  "resemblance": 0.6,
+  "guidance_scale": 4,
+  "upscale_factor": 2,
+  "negative_prompt": "(worst quality, low quality, normal quality:2)",
+  "num_inference_steps": 18,
+  "enable_safety_checker": True
+}

@@ -1,11 +1,13 @@
 import os
 import logging
 import telebot
+from PIL import Image
 from telebot import types
 from config import WORKING_CHAT_ID, MY_CHAT_ID, CHANNEL_ID
 from models.flux import generate_image_flux
 from models.diffusion_model import generate_image_diffuser
 from models.text_generator import generate_text
+from models.upscaler import upscale
 from utils import import_token, save_image
 from meme_generator import put_text_on_image
 
@@ -72,6 +74,7 @@ class MemeBot:
 
         if message.text == "Хочу всратыша!🤩":
             image = generate_image_diffuser()
+            image = upscale(image, 2)
         else:
             image = generate_image_flux()
 
@@ -88,7 +91,7 @@ class MemeBot:
         try:
             with open(meme_path, 'rb') as f:
                 self.bot.send_photo(
-                    chat_id=message.chat.id,
+                    chat_id=WORKING_CHAT_ID,
                     photo=f,
                     caption=caption
                 )

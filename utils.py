@@ -1,13 +1,35 @@
+import io
 import os
 import numpy as np
 import random
-import codecs
+import requests
 
 
 def import_token(path):
     with open(os.path.join(path, 'token.txt')) as f:
         token = f.read().strip()
     return token
+
+
+def import_imgbb_api(path):
+    with open(os.path.join(path, 'imgbb_api.txt')) as f:
+        text = f.read().strip()
+    return text
+
+
+def upload_to_imgbb(pil_image, image_format="JPEG"):
+    url = "https://api.imgbb.com/1/upload"
+    api_key = import_imgbb_api(os.path.curdir)
+
+    byte_arr = io.BytesIO()
+    pil_image.save(byte_arr, format=image_format)
+    byte_arr.seek(0)
+
+    response = requests.post(url, data={"key": api_key}, files={"image": byte_arr})
+    if response.status_code == 200:
+        return response.json()["data"]["url"]
+    else:
+        raise Exception(f"Не удалось загрузить фото. Код ошибки: {response.status_code}")
 
 
 def soft_max(output):

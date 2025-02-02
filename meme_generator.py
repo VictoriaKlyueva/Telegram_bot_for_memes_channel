@@ -14,7 +14,7 @@ def put_text_on_image(image, text):
 
     with open('fonts/' + font_choice, "rb") as f:
         bytes_font = BytesIO(f.read())
-    font = ImageFont.truetype(bytes_font, font_size if font_choice == "lobster.ttf" else font_size - 1)
+    font = ImageFont.truetype(bytes_font, font_size if font_choice == "lobster.ttf" else font_size - 2)
 
     add_shadow(text, draw, font, x, y)
     draw.text((x, y), text, color, font=font)
