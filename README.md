@@ -21,3 +21,8 @@
 # Данные:
 1. [Датасет с мемными котиками](https://www.kaggle.com/datasets/vekosek/cats-from-memes) (сама собирала!)
 2. [Датасет с мемными фразочками](https://drive.google.com/file/d/1mkrV1Ull45YXchKemoJzriMazVxcu8z-/view?usp=drive_link)
+
+\
+\
+ну и конечно....
+### [Ссылка на канал](https://t.me/neurocatmemeshihihi)
